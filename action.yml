@@ -21,7 +21,7 @@ runs:
   steps:
     - id: run-MunkiPkg
       run: |
-        git clone https://github.com/munki/munki-pkg.git
+        git clone https://github.com/munki/munki-pkg.git ${{ github.action_path }}/munki-pkg/
         chmod +x ${{ github.action_path }}/munki-pkg/munkipkg
         ${{ github.action_path }}/munki-pkg/munkipkg "$GITHUB_WORKSPACE"
       shell: bash
