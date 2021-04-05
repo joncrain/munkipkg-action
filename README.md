@@ -4,6 +4,12 @@ MunkiPkg action will create a build artifact in the build directory `build/*.pkg
 
 * _Note: Must be run on a `macos` runner._
 
+## Inputs
+
+|      Input       |   type   |                                            Example/Default                                            |                             Description                             |
+| :--------------: | :------: | :---------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------: |
+| munkipkg_version | `string` | `https://raw.githubusercontent.com/munki/munki-pkg/8d68abbab4c459857d28fdd84ad668ec6ccdf98a/munkipkg` | Location of munkipkg script. This will be downloaded by the action. |
+
 ## Outputs
 
 |  Output  |   type   |                               Example                               |                    Description                    |
