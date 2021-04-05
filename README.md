@@ -18,16 +18,7 @@ MunkiPkg action will create a build artifact in the build directory `build/*.pkg
       - uses: actions/checkout@v2
       - name: Munkpkg
         id: munkipkg
-        uses: joncrain/munkipkg@main
-```
-
-## Examples
-
-```yaml
-...
-    steps:
-      - uses: actions/checkout@v2
-      - name: Get branch names
+        uses: joncrain/munkipkg@v1.0
 ```
 
 ### Possible usage with [softprops/action-gh-release](https://github.com/softprops/action-gh-release):
@@ -42,13 +33,13 @@ jobs:
     timeout-minutes: 5 # Keeps your builds from running too long
     steps:
       - name: Checkout (this repo of a munkipkg project)
-        uses: actions/checkout@25a956c84d5dd820d28caab9f86b8d183aeeff3d # Pin SHA1 hash instead of version
+        uses: actions/checkout@v2
         with:
           lfs: true
 
       - name: Run munkipkg
         id: munkipkg
-        uses: joncrain/munkipkg-action@main
+        uses: joncrain/munkipkg-action@v1.0
 
       - name: Create Release
         uses: softprops/action-gh-release@affa18ef97bc9db20076945705aba8c516139abd
