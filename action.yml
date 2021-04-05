@@ -1,19 +1,19 @@
-name: "MunkiPkg Action"
-author: "joncrain"
-description: "GitHub Action to build a macOS package for release."
+name: MunkiPkg Action
+author: joncrain
+description: GitHub Action to build a macOS package for release.
 
 branding:
-  icon: "command"
-  color: "gray-dark"
+  icon: command
+  color: gray-dark
 
 outputs:
-  pkg-version:
+  tag:
     value: ${{ steps.munkipkg.outputs.tag }}
     description: "Returns the pkg version from the build-info file."
-  pkg-name:
+  filename:
     value: ${{ steps.munkipkg.outputs.filename }}
     description: "Returns the filename of the built pkg."
-  pkg-path:
+  filepath:
     value: ${{ steps.munkipkg.outputs.filepath }}
     description: "Returns the filepath of the built pkg."
 
