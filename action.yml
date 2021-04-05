@@ -1,0 +1,46 @@
+name: "MunkiPkg Action"
+author: "joncrain"
+description: "GitHub Action to build a macOS package for release."
+
+branding:
+  icon: "command"
+  color: "gray-dark"
+
+outputs:
+  pkg-version:
+    description: "pkg version"
+    value: ${{ steps.extract-version.outputs.tag }}
+  pkg-name:
+    description: "pkg filename"
+    value: ${{ steps.get-build-file.outputs.filename }}
+  pkg-path:
+    description: "pkg path"
+    value: ${{ steps.get-build-file.outputs.filepath }}
+runs:
+  using: "composite"
+  steps:
+    - id: run-MunkiPkg
+      run: |
+        git clone https://github.com/munki/munki-pkg.git
+        chmod +x ${{ github.action_path }}/munki-pkg/munkipkg
+        ${{ github.action_path }}/munki-pkg/munkipkg "$GITHUB_WORKSPACE"
+      shell: bash
+    - id: extract-version
+      run: |
+        if [ -f "$GITHUB_WORKSPACE"/build-info.json ]; then
+          version=$(jq -r .version "$GITHUB_WORKSPACE"/build-info.json)
+        elif [ -f "$GITHUB_WORKSPACE"/build-info.plist ]; then
+          version=$(defaults read "$GITHUB_WORKSPACE"/build-info.plist version)
+        elif [ -f "$GITHUB_WORKSPACE"/build-info.yaml ]; then
+          version=$(grep -A3 'version:' "$GITHUB_WORKSPACE"/build-info.yaml | tail -n1 | awk '{ print $2}' | sed "s/\'//g")
+        fi
+          tag="v${version}"
+        echo "::set-output name=tag::$(echo ${tag})"
+      shell: bash
+    - id: get-build-file
+      run: |
+        for file in "$GITHUB_WORKSPACE"/build/*; do
+          echo "::set-output name=filename::$(echo "${file##*/}")"
+          echo "::set-output name=filepath::$(echo "$GITHUB_WORKSPACE/build/${file##*/}")"
+        done
+      shell: bash
