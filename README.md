@@ -2,6 +2,8 @@
 
 MunkiPkg action will create a build artifact in the build directory `build/*.pkg` and will output the version of the pkg being built.
 
+* _Note: Must be run on a `macos` runner._
+
 ## Outputs
 
 |  Output  |   type   |                               Example                               |                    Description                    |
