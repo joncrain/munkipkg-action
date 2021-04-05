@@ -6,6 +6,11 @@ branding:
   icon: command
   color: gray-dark
 
+inputs:
+  munkipkg_version:
+    default: https://raw.githubusercontent.com/munki/munki-pkg/8d68abbab4c459857d28fdd84ad668ec6ccdf98a/munkipkg
+    required: false
+
 outputs:
   tag:
     value: ${{ steps.munkipkg.outputs.tag }}
@@ -22,7 +27,7 @@ runs:
   steps:
     - id: munkipkg
       run: |
-        curl https://raw.githubusercontent.com/munki/munki-pkg/main/munkipkg -o ${{ github.action_path }}/munkipkg
+        curl ${{ inputs.munkipkg_version }} -o ${{ github.action_path }}/munkipkg
         chmod +x ${{ github.action_path }}/munkipkg
         ${{ github.action_path }}/munkipkg "$GITHUB_WORKSPACE"
         if [ -f "$GITHUB_WORKSPACE"/build-info.json ]; then
