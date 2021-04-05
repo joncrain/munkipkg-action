@@ -8,25 +8,23 @@ branding:
 
 outputs:
   pkg-version:
-    description: "pkg version"
-    value: ${{ steps.extract-version.outputs.tag }}
+    value: ${{ steps.munkipkg.outputs.tag }}
+    description: "Returns the pkg version from the build-info file."
   pkg-name:
-    description: "pkg filename"
-    value: ${{ steps.get-build-file.outputs.filename }}
+    value: ${{ steps.munkipkg.outputs.filename }}
+    description: "Returns the filename of the built pkg."
   pkg-path:
-    description: "pkg path"
-    value: ${{ steps.get-build-file.outputs.filepath }}
+    value: ${{ steps.munkipkg.outputs.filepath }}
+    description: "Returns the filepath of the built pkg."
+
 runs:
   using: "composite"
   steps:
-    - id: run-MunkiPkg
+    - id: munkipkg
       run: |
         curl https://raw.githubusercontent.com/munki/munki-pkg/main/munkipkg -o ${{ github.action_path }}/munkipkg
         chmod +x ${{ github.action_path }}/munkipkg
         ${{ github.action_path }}/munkipkg "$GITHUB_WORKSPACE"
-      shell: bash
-    - id: extract-version
-      run: |
         if [ -f "$GITHUB_WORKSPACE"/build-info.json ]; then
           version=$(jq -r .version "$GITHUB_WORKSPACE"/build-info.json)
         elif [ -f "$GITHUB_WORKSPACE"/build-info.plist ]; then
@@ -34,11 +32,7 @@ runs:
         elif [ -f "$GITHUB_WORKSPACE"/build-info.yaml ]; then
           version=$(grep -A3 'version:' "$GITHUB_WORKSPACE"/build-info.yaml | tail -n1 | awk '{ print $2}' | sed "s/\'//g")
         fi
-          tag="v${version}"
-        echo "::set-output name=tag::$(echo ${tag})"
-      shell: bash
-    - id: get-build-file
-      run: |
+        echo "::set-output name=tag::$(echo v${version})"
         for file in "$GITHUB_WORKSPACE"/build/*; do
           echo "::set-output name=filename::$(echo "${file##*/}")"
           echo "::set-output name=filepath::$(echo "$GITHUB_WORKSPACE/build/${file##*/}")"
