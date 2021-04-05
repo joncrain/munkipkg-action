@@ -21,9 +21,9 @@ runs:
   steps:
     - id: run-MunkiPkg
       run: |
-        git clone https://github.com/munki/munki-pkg.git ${{ github.action_path }}/munki-pkg/
-        chmod +x ${{ github.action_path }}/munki-pkg/munkipkg
-        ${{ github.action_path }}/munki-pkg/munkipkg "$GITHUB_WORKSPACE"
+        curl https://raw.githubusercontent.com/munki/munki-pkg/main/munkipkg -o ${{ github.action_path }}/munkipkg
+        chmod +x ${{ github.action_path }}/munkipkg
+        ${{ github.action_path }}/munkipkg "$GITHUB_WORKSPACE"
       shell: bash
     - id: extract-version
       run: |
