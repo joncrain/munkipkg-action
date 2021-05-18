@@ -31,7 +31,7 @@ MunkiPkg action will create a build artifact in the build directory `build/*.pkg
 
 ### Possible usage with [apple-actions/import-codesign-cert](https://github.com/Apple-Actions/import-codesign-certs) and [softprops/action-gh-release](https://github.com/softprops/action-gh-release):
 
-If your MunkiPkg build file includes a certificate, you can store the certificate and password in a GitHub secret and use them in the build process by using the [apple-actions/import-codesign-cert](https://github.com/Apple-Actions/import-codesign-certs) action in your workflow. You can also create a release based on the version from the build file. 
+If your MunkiPkg build file includes a certificate, you can store the certificate and password in a GitHub secret and use them in the build process by using the [apple-actions/import-codesign-cert](https://github.com/Apple-Actions/import-codesign-certs) action in your workflow. You can also create a release based on the version from the build file.
 
 ```yaml
 on:
