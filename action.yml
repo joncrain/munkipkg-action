@@ -10,6 +10,9 @@ inputs:
   munkipkg_version:
     default: https://raw.githubusercontent.com/munki/munki-pkg/8d68abbab4c459857d28fdd84ad668ec6ccdf98a/munkipkg
     required: false
+  directory_to_build:
+    default: "$GITHUB_WORKSPACE"
+    required: false
 
 outputs:
   tag:
@@ -29,17 +32,17 @@ runs:
       run: |
         curl ${{ inputs.munkipkg_version }} -o ${{ github.action_path }}/munkipkg
         chmod +x ${{ github.action_path }}/munkipkg
-        ${{ github.action_path }}/munkipkg "$GITHUB_WORKSPACE"
-        if [ -f "$GITHUB_WORKSPACE"/build-info.json ]; then
-          version=$(jq -r .version "$GITHUB_WORKSPACE"/build-info.json)
-        elif [ -f "$GITHUB_WORKSPACE"/build-info.plist ]; then
-          version=$(defaults read "$GITHUB_WORKSPACE"/build-info.plist version)
-        elif [ -f "$GITHUB_WORKSPACE"/build-info.yaml ]; then
-          version=$(grep -A3 'version:' "$GITHUB_WORKSPACE"/build-info.yaml | tail -n1 | awk '{ print $2}' | sed "s/\'//g")
+        ${{ github.action_path }}/munkipkg ${{ inputs.munkipkg_version }}
+        if [ -f ${{ inputs.munkipkg_version }}/build-info.json ]; then
+          version=$(jq -r .version ${{ inputs.munkipkg_version }}/build-info.json)
+        elif [ -f ${{ inputs.munkipkg_version }}/build-info.plist ]; then
+          version=$(defaults read ${{ inputs.munkipkg_version }}/build-info.plist version)
+        elif [ -f ${{ inputs.munkipkg_version }}/build-info.yaml ]; then
+          version=$(grep -A3 'version:' ${{ inputs.munkipkg_version }}/build-info.yaml | tail -n1 | awk '{ print $2}' | sed "s/\'//g")
         fi
         echo "::set-output name=tag::$(echo v${version})"
-        for file in "$GITHUB_WORKSPACE"/build/*; do
+        for file in ${{ inputs.munkipkg_version }}/build/*; do
           echo "::set-output name=filename::$(echo "${file##*/}")"
-          echo "::set-output name=filepath::$(echo "$GITHUB_WORKSPACE/build/${file##*/}")"
+          echo "::set-output name=filepath::$(echo ${{ inputs.munkipkg_version }}/build/${file##*/}")"
         done
       shell: bash
