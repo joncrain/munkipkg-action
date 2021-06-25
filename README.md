@@ -1,5 +1,7 @@
 # munkipkg-action
 
+_This action utilizes Greg Neagle's excellent pkg building tool [munkipkg](https://github.com/munki/munki-pkg)_
+
 MunkiPkg action will create a build artifact in the build directory `build/*.pkg` and will output the version of the pkg being built.
 
 * _Note: Must be run on a `macos` runner._
