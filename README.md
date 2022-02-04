@@ -11,7 +11,7 @@ MunkiPkg action will create a build artifact in the build directory `build/*.pkg
 |      Input       |        type         |                                            Example/Default                                            |                             Description                             |
 | :--------------: | :-----------------: | :---------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------: |
 | munkipkg_version | `string` (optional) | `https://raw.githubusercontent.com/munki/munki-pkg/8d68abbab4c459857d28fdd84ad668ec6ccdf98a/munkipkg` | Location of munkipkg script. This will be downloaded by the action. |
-| pkg_subdir       | `string` (optional) | `""`/"subfolder"                                                                                      | Location of folder to pkg. Defaults to the root of the repo         |
+| pkg_subdir       | `string` (optional) | `""`/`"subfolder"`                                                                                     | Location of folder to pkg. Defaults to the root of the repo         |
 
 ## Outputs
 
