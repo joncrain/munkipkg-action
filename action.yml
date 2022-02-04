@@ -10,6 +10,9 @@ inputs:
   munkipkg_version:
     default: https://raw.githubusercontent.com/munki/munki-pkg/8d68abbab4c459857d28fdd84ad668ec6ccdf98a/munkipkg
     required: false
+  pkg_subdir:
+    default: ""
+    required: false
 
 outputs:
   tag:
@@ -29,17 +32,18 @@ runs:
       run: |
         curl ${{ inputs.munkipkg_version }} -o ${{ github.action_path }}/munkipkg
         chmod +x ${{ github.action_path }}/munkipkg
-        ${{ github.action_path }}/munkipkg "$GITHUB_WORKSPACE"
-        if [ -f "$GITHUB_WORKSPACE"/build-info.json ]; then
-          version=$(jq -r .version "$GITHUB_WORKSPACE"/build-info.json)
-        elif [ -f "$GITHUB_WORKSPACE"/build-info.plist ]; then
-          version=$(defaults read "$GITHUB_WORKSPACE"/build-info.plist version)
-        elif [ -f "$GITHUB_WORKSPACE"/build-info.yaml ]; then
-          version=$(grep -A3 'version:' "$GITHUB_WORKSPACE"/build-info.yaml | tail -n1 | awk '{ print $2}' | sed "s/\'//g")
+        $pkg_path = "$GITHUB_WORKSPACE"/${{ inputs.pkg_subdir }}
+        ${{ github.action_path }}/munkipkg "$pkg_path"
+        if [ -f "$pkg_path"/build-info.json ]; then
+          version=$(jq -r .version "$pkg_path"/build-info.json)
+        elif [ -f "$pkg_path"/build-info.plist ]; then
+          version=$(defaults read "$pkg_path"/build-info.plist version)
+        elif [ -f "$pkg_path"/build-info.yaml ]; then
+          version=$(grep -A3 'version:' "$pkg_path"/build-info.yaml | tail -n1 | awk '{ print $2}' | sed "s/\'//g")
         fi
         echo "::set-output name=tag::$(echo v${version})"
-        for file in "$GITHUB_WORKSPACE"/build/*; do
+        for file in "$pkg_path"/build/*; do
           echo "::set-output name=filename::$(echo "${file##*/}")"
-          echo "::set-output name=filepath::$(echo "$GITHUB_WORKSPACE/build/${file##*/}")"
+          echo "::set-output name=filepath::$(echo "$pkg_path/build/${file##*/}")"
         done
       shell: bash
