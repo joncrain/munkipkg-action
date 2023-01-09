@@ -33,7 +33,7 @@ runs:
         curl ${{ inputs.munkipkg_version }} -o ${{ github.action_path }}/munkipkg
         chmod +x ${{ github.action_path }}/munkipkg
         pkg_path="$GITHUB_WORKSPACE"/${{ inputs.pkg_subdir }}
-        ${{ github.action_path }}/munkipkg "$pkg_path"
+        python3 ${{ github.action_path }}/munkipkg "$pkg_path"
         if [ -f "$pkg_path"/build-info.json ]; then
           version=$(jq -r .version "$pkg_path"/build-info.json)
         elif [ -f "$pkg_path"/build-info.plist ]; then
