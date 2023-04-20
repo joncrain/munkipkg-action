@@ -41,9 +41,12 @@ runs:
         elif [ -f "$pkg_path"/build-info.yaml ]; then
           version=$(grep -A3 'version:' "$pkg_path"/build-info.yaml | tail -n1 | awk '{ print $2}' | sed "s/\'//g")
         fi
-        echo "::set-output name=tag::$(echo v${version})"
+        # echo "::set-output name=tag::$(echo v${version})"
+        echo "tag::$(echo v${version})" >> $GITHUB_OUTPUT
         for file in "$pkg_path"/build/*; do
-          echo "::set-output name=filename::$(echo "${file##*/}")"
-          echo "::set-output name=filepath::$(echo "$pkg_path/build/${file##*/}")"
+          # echo "::set-output name=filename::$(echo "${file##*/}")"
+          echo "filename::$(echo "${file##*/}")" >> $GITHUB_OUTPUT
+          # echo "::set-output name=filepath::$(echo "$pkg_path/build/${file##*/}")"
+          echo "filepath::$(echo "$pkg_path/build/${file##*/}")" >> $GITHUB_OUTPUT
         done
       shell: bash
